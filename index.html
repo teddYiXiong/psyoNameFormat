@@ -8,6 +8,18 @@
     <button class="copyFormatButton">Copying: for Google</button>
    <br></br>
   <style>
+   h1 {
+    font-size: 50px;
+   }
+   button {
+     font-size: 20px;
+   }
+   input {
+    font-size: 20px;
+   }
+   .totalCount {
+     font-size: 20px;
+   }
    .indexList {
      width: 25px;
      float: left;
@@ -16,6 +28,8 @@
    .formattedList {
      margin-left: 25px;
      white-space: pre;
+     -webkit-text-size-adjust: 100%;
+     text-size-adjust: 100%;
    }
    .clear {
      clear: both;
@@ -43,491 +57,492 @@
   </div>
 
 <script>
+
   /*(0.) Initiation-----------------------------*/
-const parseFormatButton = document.querySelector('.parseFormatButton');
-const copyFormatButton = document.querySelector('.copyFormatButton');
-const input = document.querySelector('input');
-const generateButton = document.querySelector('.generateButton');
-const sortButton = document.querySelector('.sortButton');
-const copyButton = document.querySelector('.copyButton');
-const totalCount = document.querySelector('.totalCount');
-const indexList = document.querySelector('.indexList');
-const formattedList = document.querySelector('.formattedList');
-let indexNumber = 0;
+    const parseFormatButton = document.querySelector('.parseFormatButton');
+    const copyFormatButton = document.querySelector('.copyFormatButton');
+    const input = document.querySelector('input');
+    const generateButton = document.querySelector('.generateButton');
+    const sortButton = document.querySelector('.sortButton');
+    const copyButton = document.querySelector('.copyButton');
+    const totalCount = document.querySelector('.totalCount');
+    const indexList = document.querySelector('.indexList');
+    const formattedList = document.querySelector('.formattedList');
+    let indexNumber = 0;
 
-const listFontSize = "14px";
-indexList.style.fontSize = listFontSize;
-formattedList.style.fontSize = listFontSize;
-  
+    const listFontSize = "20px";
+    indexList.style.fontSize = listFontSize;
+    formattedList.style.fontSize = listFontSize;
+      
   /*(1.) Buttons Functions-------------------------*/
-generateButton.onclick = function() {
-  parseInput();
-  addSelectedArrayToList();
-};
-  
-sortButton.onclick = function() {
-  toggleFormat("Sort");
-  setSortButtonText();
-  addSelectedArrayToList();
-};
-  
-copyButton.onclick = function() {
-  copy(getStringToCopy());  };
+    generateButton.onclick = function() {
+      parseInput();
+      addSelectedArrayToList();
+    };
+      
+    sortButton.onclick = function() {
+      toggleFormat("Sort");
+      setSortButtonText();
+      addSelectedArrayToList();
+    };
+      
+    copyButton.onclick = function() {
+      copy(getStringToCopy());  };
 
-parseFormatButton.onclick = function() {
-  toggleFormat("Parse");
-  setParseButtonText();  };
-  
-copyFormatButton.onclick = function() {
-  toggleFormat("Copy");
-  setCopyButtonText();  };
-  
+    parseFormatButton.onclick = function() {
+      toggleFormat("Parse");
+      setParseButtonText();  };
+      
+    copyFormatButton.onclick = function() {
+      toggleFormat("Copy");
+      setCopyButtonText();  };
+      
   /*(2.) Toggle Function---------------------------*/ 
-let parsingFormat = "Normal";
-let copyingFormat = "Google";
-let isSorting = false;
-  
-function toggleFormat(toToggle) {
-  if(toToggle == "Parse") {
-    if(parsingFormat == "Normal") {
-      parsingFormat = "Google";  }
-    else if(parsingFormat == "Google") {
-      parsingFormat = "Ragic";  }
-    else if(parsingFormat == "Ragic") {
-      parsingFormat = "Normal";  }
-  }
-  else if(toToggle == "Copy") {
-    if(copyingFormat == "Normal") {
-      copyingFormat = "Google";  }
-    else if(copyingFormat == "Google") {
-      copyingFormat = "Filemaker";  }
-    else if(copyingFormat == "Filemaker") {
-      copyingFormat = "Ragic";  }
-    else if(copyingFormat == "Ragic") {
-      copyingFormat = "Normal";  }
-  }
-  else if(toToggle == "Sort") {
-    if(isSorting) {
-      isSorting = false;  }
-    else if(!isSorting) {
-      isSorting = true;  }
-  }
-}
-  
+    let parsingFormat = "Normal";
+    let copyingFormat = "Google";
+    let isSorting = false;
+      
+    function toggleFormat(toToggle) {
+      if(toToggle == "Parse") {
+        if(parsingFormat == "Normal") {
+          parsingFormat = "Google";  }
+        else if(parsingFormat == "Google") {
+          parsingFormat = "Ragic";  }
+        else if(parsingFormat == "Ragic") {
+          parsingFormat = "Normal";  }
+      }
+      else if(toToggle == "Copy") {
+        if(copyingFormat == "Normal") {
+          copyingFormat = "Google";  }
+        else if(copyingFormat == "Google") {
+          copyingFormat = "Filemaker";  }
+        else if(copyingFormat == "Filemaker") {
+          copyingFormat = "Ragic";  }
+        else if(copyingFormat == "Ragic") {
+          copyingFormat = "Normal";  }
+      }
+      else if(toToggle == "Sort") {
+        if(isSorting) {
+          isSorting = false;  }
+        else if(!isSorting) {
+          isSorting = true;  }
+      }
+    }
+      
   /*(3.) Parsing Functions-------------------------*/
 
-function setParseButtonText() {
-  if(parsingFormat == "Normal") {
-   parseFormatButton.textContent = "Parsing: Normal Text";
-  }
-  else if(parsingFormat == "Google") {
-   parseFormatButton.textContent = "Parsing: Google";
-  }
-  else if(parsingFormat == "Ragic") {
-   parseFormatButton.textContent = "Parsing: Ragic";
-  }
-}
-  
-function parseIntoArray(inputString) {
-  if(parsingFormat == "Normal") {
-   return inputString.split(' ');
-  }
-  else if(parsingFormat == "Google") {
-   let arrayForGoogle = inputString.split(',');
-    for(i=0;i<arrayForGoogle.length;i++) {
-      arrayForGoogle[i] = arrayForGoogle[i].slice(1, arrayForGoogle[i].length-1);
+    function setParseButtonText() {
+      if(parsingFormat == "Normal") {
+        parseFormatButton.textContent = "Parsing: Normal Text";
+      }
+      else if(parsingFormat == "Google") {
+        parseFormatButton.textContent = "Parsing: Google";
+      }
+      else if(parsingFormat == "Ragic") {
+        parseFormatButton.textContent = "Parsing: Ragic";
+      }
     }
-   return arrayForGoogle;
-  }
-  else if(parsingFormat == "Ragic") {
-   let slicedString = inputString.slice(8,inputString.length-2);
-   return slicedString.split('|');
-  }
-}
+      
+    function parseIntoArray(inputString) {
+      if(parsingFormat == "Normal") {
+      return inputString.split(' ');
+      }
+      else if(parsingFormat == "Google") {
+      let arrayForGoogle = inputString.split(',');
+        for(i=0;i<arrayForGoogle.length;i++) {
+          arrayForGoogle[i] = arrayForGoogle[i].slice(1, arrayForGoogle[i].length-1);
+        }
+      return arrayForGoogle;
+      }
+      else if(parsingFormat == "Ragic") {
+      let slicedString = inputString.slice(8,inputString.length-2);
+      return slicedString.split('|');
+      }
+    }
 
-function parseInput() {
-  let unformattedArray = parseIntoArray(input.value);
-  emptyArrays();
-  formattedArray = formatArray(unformattedArray);
-  sortedArray = sortNames(formattedArray);
-}
-  
+    function parseInput() {
+      let unformattedArray = parseIntoArray(input.value);
+      emptyArrays();
+      formattedArray = formatArray(unformattedArray);
+      sortedArray = sortNames(formattedArray);
+    }
+      
   /*(4.) Copy Functions---------------------------*/
-function setCopyButtonText() {
-  if(copyingFormat == "Normal") {
-   copyFormatButton.textContent = "Copying: Normal Text";
-  }
-  else if(copyingFormat == "Google") {
-   copyFormatButton.textContent = "Copying: Google";
-  }
-  else if(copyingFormat == "Filemaker") {
-   copyFormatButton.textContent = "Copying: Filemaker";
-  }
-  else if(copyingFormat == "Ragic") {
-   copyFormatButton.textContent = "Copying: Ragic";
-  }
-}
-  
-function getStringToCopy() {
-  if(copyingFormat == "Normal") {
-   return formattedNormally;
-  }
-  else if(copyingFormat == "Google") {
-   return formattedForGoogle;
-  }
-  else if(copyingFormat == "Filemaker") {
-   return formattedForFilemaker;
-  }
-  else if(copyingFormat == "Ragic") {
-   return formattedForRagic;
-  }
-}
-  
-function copy(forCopy) {
-  let temporaryInput = document.createElement("textarea");
-    temporaryInput.value = forCopy;
-    document.body.appendChild(temporaryInput);
-    temporaryInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(temporaryInput);
-}
+    function setCopyButtonText() {
+      if(copyingFormat == "Normal") {
+      copyFormatButton.textContent = "Copying: Normal Text";
+      }
+      else if(copyingFormat == "Google") {
+      copyFormatButton.textContent = "Copying: Google";
+      }
+      else if(copyingFormat == "Filemaker") {
+      copyFormatButton.textContent = "Copying: Filemaker";
+      }
+      else if(copyingFormat == "Ragic") {
+      copyFormatButton.textContent = "Copying: Ragic";
+      }
+    }
+      
+    function getStringToCopy() {
+      if(copyingFormat == "Normal") {
+      return formattedNormally;
+      }
+      else if(copyingFormat == "Google") {
+      return formattedForGoogle;
+      }
+      else if(copyingFormat == "Filemaker") {
+      return formattedForFilemaker;
+      }
+      else if(copyingFormat == "Ragic") {
+      return formattedForRagic;
+      }
+    }
+      
+    function copy(forCopy) {
+      let temporaryInput = document.createElement("textarea");
+        temporaryInput.value = forCopy;
+        document.body.appendChild(temporaryInput);
+        temporaryInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(temporaryInput);
+    }
 
   /*(5.) Sorting Functions---------------------*/
-function setSortButtonText() {
-  if(isSorting) {
-   sortButton.textContent = "Sorting: On";
-  }
-  else if(!isSorting) {
-   sortButton.textContent = "Sorting: Off";
-  }
-}
-  
-function sortNames(inputArray) {
-  let outputArray = [];
-  let indexForArray = 0;
-  
-   for(i=0;i<nameOrder.length;i++) {
-    if(inputArray.indexOf(nameOrder[i]) != -1) {
-     outputArray[indexForArray] = nameOrder[i];;
-     indexForArray++;  }
+    function setSortButtonText() {
+      if(isSorting) {
+      sortButton.textContent = "Sorting: On";
+      }
+      else if(!isSorting) {
+      sortButton.textContent = "Sorting: Off";
+      }
     }
-  return outputArray;
-}
-  
+      
+    function sortNames(inputArray) {
+      let outputArray = [];
+      let indexForArray = 0;
+      
+      for(i=0;i<nameOrder.length;i++) {
+        if(inputArray.indexOf(nameOrder[i]) != -1) {
+        outputArray[indexForArray] = nameOrder[i];;
+        indexForArray++;  }
+        }
+      return outputArray;
+    }
+      
   /*(6.) Formatting Functions---------------------*/
-let formattedNormally = "";
-let formattedForGoogle = "";
-let formattedForFilemaker = "";
-let formattedForRagic = "";
-let formattedArray = [];
-let sortedArray = [];
-  
-function resetStrings() {
-  input.value = "";
-  formattedNormally = "";
-  formattedForGoogle = "";
-  formattedForFilemaker = "";
-  formattedForRagic = "regex:^(";
-  indexList.textContent = "";
-  formattedList.textContent = "";
-  indexNumber = 0;
-}
-
-function endStrings() {
-  formattedNormally = formattedNormally.slice(0, formattedNormally.length-1);
-  formattedForGoogle = formattedForGoogle.slice(0, formattedForGoogle.length-1);
-  formattedForFilemaker = formattedForFilemaker.slice(0, formattedForFilemaker.length-1);
-  formattedForRagic = formattedForRagic.slice(0, formattedForRagic.length-1);
-  formattedForRagic += ")$";
-}
-
-function emptyArrays() {
-  formattedArray = [];
-  sortedArray = [];
-}
-  
-function formatArray(inputArray) {
-  let formattedName;
-  let outputArray = [];
-  let indexForArray = 0;
-    for(i=0; i<inputArray.length; i++)  {
-     formattedName = formatName(inputArray[i]);
-     if(formattedName != "") {
-       outputArray[indexForArray] = formattedName;
-       indexForArray++;  }
+    let formattedNormally = "";
+    let formattedForGoogle = "";
+    let formattedForFilemaker = "";
+    let formattedForRagic = "";
+    let formattedArray = [];
+    let sortedArray = [];
+      
+    function resetStrings() {
+      input.value = "";
+      formattedNormally = "";
+      formattedForGoogle = "";
+      formattedForFilemaker = "";
+      formattedForRagic = "regex:^(";
+      indexList.textContent = "";
+      formattedList.textContent = "";
+      indexNumber = 0;
     }
-  return outputArray;
-}
-  
-  /*(6.) Write-to-List Functions-------------------*/
-function addSelectedArrayToList() {
-  resetStrings();
-  resetRedundancyList();
-  let inputArray = [];
-  
-  if(isSorting) {
-    inputArray = sortedArray;  }
-  else {
-    inputArray = formattedArray;  }
-  
-  for(i=0; i<inputArray.length; i++)  {
-   addNicknameToList(inputArray[i]);
-  }
-  endStrings();
-  setTotal(indexNumber);
-}
 
-function addNicknameToList(inputName) { 
-  console.log(parsingFormat!="Google"&&!isIncompatible(inputName));
-  if(parsingFormat=="Google"&&isIncompatible(inputName)) {
-  /*Do Nothing;*/  }
-  else {
-   if(!isRepeated(inputName)&&!isVague(inputName))  {
-     indexNumber++;
-     fillStrings(indexNumber, inputName, "normal");  }
-    else if(isRepeated(inputName)&&!isVague(inputName)) {
-     indexNumber++;
-     fillStrings(indexNumber, inputName, "red");  }
-    else if(isVague(inputName)) {
-     indexNumber++;
-     fillStrings(indexNumber, inputName, "blue");  }
-  }
-}
-  
-function fillStrings(index, nickname, color) {
-  formattedNormally += `${nickname} `;
-  formattedForGoogle += `[${nickname}],`;
-  formattedForRagic += `${nickname}|`;
-  formattedForFilemaker += `${nickname}\n`;
-  indexList.innerHTML += `${index}.\r\n`;
-  
-  if(color == "normal") {
-   formattedList.innerHTML += `${nickname}\r\n`;
-  }
-  else if(color == "red") {
-   formattedList.innerHTML += `<span class='red'>${nickname}</span>\r\n`;
-  }
-  else if(color == "blue") {
-   formattedList.innerHTML += `<span class='blue'>${nickname}</span>\r\n`;
-  }
-  else {
-   console.log("Color not defined");
-  }
-}
-  
-function setTotal(number) {
-  if(number != 0) {
-   totalCount.textContent = `Total: ${number}`;
-  }
-  else if(number == 0) {
-   totalCount.textContent = '';
-  }
-}
+    function endStrings() {
+      formattedNormally = formattedNormally.slice(0, formattedNormally.length-1);
+      formattedForGoogle = formattedForGoogle.slice(0, formattedForGoogle.length-1);
+      formattedForFilemaker = formattedForFilemaker.slice(0, formattedForFilemaker.length-1);
+      formattedForRagic = formattedForRagic.slice(0, formattedForRagic.length-1);
+      formattedForRagic += ")$";
+    }
+
+    function emptyArrays() {
+      formattedArray = [];
+      sortedArray = [];
+    }
+      
+    function formatArray(inputArray) {
+      let formattedName;
+      let outputArray = [];
+      let indexForArray = 0;
+        for(i=0; i<inputArray.length; i++)  {
+        formattedName = formatName(inputArray[i]);
+        if(formattedName != "") {
+          outputArray[indexForArray] = formattedName;
+          indexForArray++;  }
+        }
+      return outputArray;
+    }
+      
+  /*(6.) Write-to-List Functions-------------------*/
+    function addSelectedArrayToList() {
+      resetStrings();
+      resetRedundancyList();
+      let inputArray = [];
+      
+      if(isSorting) {
+        inputArray = sortedArray;  }
+      else {
+        inputArray = formattedArray;  }
+      
+      for(i=0; i<inputArray.length; i++)  {
+      addNicknameToList(inputArray[i]);
+      }
+      endStrings();
+      setTotal(indexNumber);
+    }
+
+    function addNicknameToList(inputName) { 
+      console.log(parsingFormat!="Google"&&!isIncompatible(inputName));
+      if(parsingFormat=="Google"&&isIncompatible(inputName)) {
+      /*Do Nothing;*/  }
+      else {
+       if(!isRepeated(inputName)&&!isVague(inputName))  {
+        indexNumber++;
+        fillStrings(indexNumber, inputName, "normal");  }
+       else if(isRepeated(inputName)&&!isVague(inputName)) {
+        indexNumber++;
+        fillStrings(indexNumber, inputName, "red");  }
+       else if(isVague(inputName)) {
+        indexNumber++;
+        fillStrings(indexNumber, inputName, "blue");  }
+      }
+    }
+      
+    function fillStrings(index, nickname, color) {
+      formattedNormally += `${nickname} `;
+      formattedForGoogle += `[${nickname}],`;
+      formattedForRagic += `${nickname}|`;
+      formattedForFilemaker += `${nickname}\n`;
+      indexList.innerHTML += `${index}.\r\n`;
+      
+      if(color == "normal") {
+        formattedList.innerHTML += `${nickname}\r\n`;
+      }
+      else if(color == "red") {
+        formattedList.innerHTML += `<span class='red'>${nickname}</span>\r\n`;
+      }
+      else if(color == "blue") {
+        formattedList.innerHTML += `<span class='blue'>${nickname}</span>\r\n`;
+      }
+      else {
+        console.log("Color not defined");
+      }
+    }
+      
+    function setTotal(number) {
+      if(number != 0) {
+      totalCount.textContent = `Total: ${number}`;
+      }
+      else if(number == 0) {
+      totalCount.textContent = '';
+      }
+    }
 
   /*(7.) Check-name Functions---------------------*/
-let redundancyList = [];
-let redundancyIndex = 0;
-  
-function resetRedundancyList() {
-  redundancyList = [];
-  redundancyIndex = 0;
-}
-  
-function addToRedundancyList(item) {
-  redundancyList[redundancyIndex] = item;
-  redundancyIndex++;
-}
-  
-function isRepeated(item) {
-  if(redundancyList.indexOf(item) != -1) {
-   addToRedundancyList(item);
-   return true;
-  }
-  else {
-   addToRedundancyList(item);
-   return false;  }
-}
-  
-function isVague(item) {
-  let truthValue = false;
-    for(k=0; k<vagueNames.length; k++)  {
-     if(item == vagueNames[k]) {
-      truthValue = true;  }
+    let redundancyList = [];
+    let redundancyIndex = 0;
+      
+    function resetRedundancyList() {
+      redundancyList = [];
+      redundancyIndex = 0;
     }
-  return truthValue;
-}
-  
-function isIncompatible(item) {
-  let truthValue = false;
-    for(k=0; k<incompatibleNames.length; k++)  {
-     if(item == incompatibleNames[k]) {
-      truthValue = true;  }
+      
+    function addToRedundancyList(item) {
+      redundancyList[redundancyIndex] = item;
+      redundancyIndex++;
     }
-  return truthValue;
-}
+      
+    function isRepeated(item) {
+      if(redundancyList.indexOf(item) != -1) {
+      addToRedundancyList(item);
+      return true;
+      }
+      else {
+      addToRedundancyList(item);
+      return false;  }
+    }
+      
+    function isVague(item) {
+      let truthValue = false;
+        for(k=0; k<vagueNames.length; k++)  {
+        if(item == vagueNames[k]) {
+          truthValue = true;  }
+        }
+      return truthValue;
+    }
+      
+    function isIncompatible(item) {
+      let truthValue = false;
+        for(k=0; k<incompatibleNames.length; k++)  {
+        if(item == incompatibleNames[k]) {
+          truthValue = true;  }
+        }
+      return truthValue;
+    }
 
   /*(8.) Name-Formatting Function----------*/
-let nameOrder = ["Herrick", "Patrick", "Aimee",
-   "Teddy", "Wayne", "Polo", "Catherine", "Samarra", "Kayleigh", "Clarisse", "Joshua", "Yumi", "Stefi", "Andy", "Breanna",
-   "Jamie", "Kristen", "Christophe", "Ian", "Gab", "Basti", "Jace", "Lianne", "Marga", "Kylie", "Sophia", "Veniece",
-   "Rafael S.", "Vivienne", "Lemuel", "Jediah", "Bella Monte", "Jaime", "Eliana", "Raya", "Dyego",
-   "Kerr", "Regina", "Lumi", "Azul", "Sophie",
- "Luis", "Storm", "Inigo", "Patrice", "Rocco", "Ashton", "Annie", "Ady", "Lizzie", "Andre", "Rafael O.", "Maddy", "Ellie", "Caitlin", "Justine", "Aleesha",
-   "Yob", "Paulina", "Angela", "Chinee", "Noah", "A", "B", "C", "--Blank--"];
-let vagueNames = ["Audrey", "Annie", "Sophia", "Bella Liuson", "Rafael S.", "Lizzie"];
-let incompatibleNames = [];
-//let incompatibleNames = ["Teddy", "Ian"];
+    let nameOrder = ["Herrick", "Patrick", "Aimee",
+      "Teddy", "Wayne", "Polo", "Catherine", "Samarra", "Kayleigh", "Clarisse", "Joshua", "Yumi", "Stefi", "Andy", "Breanna",
+      "Jamie", "Kristen", "Christophe", "Ian", "Gab", "Basti", "Jace", "Lianne", "Marga", "Kylie", "Sophia", "Veniece",
+      "Rafael S.", "Vivienne", "Lemuel", "Jediah", "Bella Monte", "Jaime", "Eliana", "Raya", "Dyego",
+      "Kerr", "Regina", "Lumi", "Azul", "Sophie",
+    "Luis", "Storm", "Inigo", "Patrice", "Rocco", "Ashton", "Annie", "Ady", "Lizzie", "Andre", "Rafael O.", "Maddy", "Ellie", "Caitlin", "Justine", "Aleesha",
+      "Yob", "Paulina", "Angela", "Chinee", "Noah", "A", "B", "C", "--Blank--"];
+    let vagueNames = ["Audrey", "Annie", "Sophia", "Bella Liuson", "Rafael S.", "Lizzie"];
+    let incompatibleNames = [];
+    //let incompatibleNames = ["Teddy", "Ian"];
 
-function formatName(unformatted)  {
-  
-  //Teachers
- if(unformatted == "Herrick") {
- return "Herrick";  }
- if(unformatted == "Patrick") {
- return "Patrick";  }
- if(unformatted == "Aimee") {
- return "Aimee";  }
-  
-  //Violin 1
- if(unformatted == "Teddy") {
- return "Teddy";  }
- if(unformatted == "Waynerythe"||unformatted == "Wayne") {
- return "Wayne";  }
- if(unformatted == "Napoleon"||unformatted == "Polo") {
- return "Polo";  } 
- if(unformatted == "Catherine") {
- return "Catherine";  }
- if(unformatted == "Samarra") {
- return "Samarra";  }
- if(unformatted == "Kayleigh") {
- return "Kayleigh";  }
- if(unformatted == "Clarisse") {
- return "Clarisse";  }
- if(unformatted == "Joshua") {
- return "Joshua";  }
- if(unformatted == "Yumi") {
- return "Yumi";  }
- if(unformatted == "Stephie"||unformatted == "StephanieAdrienne"||unformatted == "Stefi") {
- return "Stefi";  }
- if(unformatted == "Andy") {
- return "Andy";  }
- if(unformatted == "Breanna") {
- return "Breanna";  }
-  
-  //Violin 2
- if(unformatted == "Jamie") {
- return "Jamie";  }
- if(unformatted == "Kristen") {
- return "Kristen";  }
- if(unformatted == "Cristophe"||unformatted == "Christophe") {
- return "Christophe";  } 
- if(unformatted == "Ian") {
- return "Ian";  }
- if(unformatted == "Gabriel"||unformatted == "Gab") {
- return "Gab";  }
- if(unformatted == "Sebastian"||unformatted == "Basti") {
- return "Basti";  } 
- if(unformatted == "Jace") {
- return "Jace";  }
- if(unformatted == "Lianne") {
- return "Lianne";  }
- if(unformatted == "Margarita"||unformatted == "Marga") {
- return "Marga";  }
- if(unformatted == "Nickylie"||unformatted == "Kylie") {
- return "Kylie";  }
- if(unformatted == "SophiaGabrielle"||unformatted == "Sophia") {
- return "Sophia";  } 
- if(unformatted == "Veniece") {
- return "Veniece";  }
-  
-  //Violin 3
- if(unformatted == "RafaelS"||unformatted == "Rafael"||unformatted == "Rafael S.") {
- return "Rafael S.";  }
- if(unformatted == "VivienneAudrey"||unformatted == "Vivienne") {
- return "Vivienne";  }
- if(unformatted == "Lemuel") {
- return "Lemuel";  }
- if(unformatted == "Jediah") {
- return "Jediah";  }
- if(unformatted == "Nica"||unformatted == "BellaMonte"||unformatted == "Bella Monte") {
- return "Bella Monte";  }
- if(unformatted == "Jaime") {
- return "Jaime";  }
- if(unformatted == "Eliana") {
- return "Eliana";  }
- if(unformatted == "Raya") {
- return "Raya";  }
- if(unformatted == "Dyego") {
- return "Dyego";  }
-  
-  //Viola
- if(unformatted == "KerrMcGee"||unformatted == "Kerr") {
- return "Kerr";  }
- if(unformatted == "Regina") {
- return "Regina";  }
- if(unformatted == "Seanna"||unformatted == "Lumi") {
- return "Lumi";  }
- if(unformatted == "Azul") {
- return "Azul";  }
- if(unformatted == "SophiaAnne"||unformatted == "Sophie") {
- return "Sophie";  }
-  
-  //Cello
- if(unformatted == "Luis") {
- return "Luis";  }
- if(unformatted == "Lucas"||unformatted == "Storm") {
- return "Storm";  }
- if(unformatted == "Inigo") {
- return "Inigo";  }
- if(unformatted == "Patrice") {
- return "Patrice";  }
- if(unformatted == "Fransisco"||unformatted == "Rocco") {
- return "Rocco";  }
- if(unformatted == "AshtonCastro"||unformatted == "Ashton Castro"||unformatted == "Ashton") {
- return "Ashton";  }
- if(unformatted == "StephanieAnastacia"||unformatted == "Stephanie"||unformatted == "Annie") {
- return "Annie";  }
- if(unformatted == "Adeline"||unformatted == "Ady") {
- return "Ady";  }
- if(unformatted == "LiaElizabeth"||unformatted == "Lia"||unformatted == "Lizzie") {
- return "Lizzie";  }
- if(unformatted == "Andre") {
- return "Andre";  }
- if(unformatted == "RafaelO"||unformatted == "Rafael O.") {
- return "Rafael O.";  }
- if(unformatted == "LiaMadeleine"||unformatted == "Madeleine"||unformatted == "Maddy") {
- return "Maddy";  }
- if(unformatted == "Aurelia"||unformatted == "Ellie") {
- return "Ellie";  }
- if(unformatted == "Caitlin") {
- return "Caitlin";  }
- if(unformatted == "Aleesha") {
- return "Aleesha";  }
-  
-  //Db Bass, Piano, and Perc
- if(unformatted == "Yob") {
- return "Yob";  }
- if(unformatted == "Paulina") {
- return "Paulina";  }
- if(unformatted == "Angela") {
- return "Angela";  }
- if(unformatted == "Mary"||unformatted == "Chinee") {
- return "Chinee";  }
- if(unformatted == "Noah") {
- return "Noah";  }
-  
-  //Formatting
- if(unformatted == "A") {
- return "A";  }
- if(unformatted == "B") {
- return "B";  }
- if(unformatted == "C") {
- return "C";  }
- if(unformatted == "Blank") {
- return "--Blank--";  }
- else {
- return "";
- } }
+    function formatName(unformatted)  {
+      
+      //Teachers
+    if(unformatted == "Herrick") {
+    return "Herrick";  }
+    if(unformatted == "Patrick") {
+    return "Patrick";  }
+    if(unformatted == "Aimee") {
+    return "Aimee";  }
+      
+      //Violin 1
+    if(unformatted == "Teddy") {
+    return "Teddy";  }
+    if(unformatted == "Waynerythe"||unformatted == "Wayne") {
+    return "Wayne";  }
+    if(unformatted == "Napoleon"||unformatted == "Polo") {
+    return "Polo";  } 
+    if(unformatted == "Catherine") {
+    return "Catherine";  }
+    if(unformatted == "Samarra") {
+    return "Samarra";  }
+    if(unformatted == "Kayleigh") {
+    return "Kayleigh";  }
+    if(unformatted == "Clarisse") {
+    return "Clarisse";  }
+    if(unformatted == "Joshua") {
+    return "Joshua";  }
+    if(unformatted == "Yumi") {
+    return "Yumi";  }
+    if(unformatted == "Stephie"||unformatted == "StephanieAdrienne"||unformatted == "Stefi") {
+    return "Stefi";  }
+    if(unformatted == "Andy") {
+    return "Andy";  }
+    if(unformatted == "Breanna") {
+    return "Breanna";  }
+      
+      //Violin 2
+    if(unformatted == "Jamie") {
+    return "Jamie";  }
+    if(unformatted == "Kristen") {
+    return "Kristen";  }
+    if(unformatted == "Cristophe"||unformatted == "Christophe") {
+    return "Christophe";  } 
+    if(unformatted == "Ian") {
+    return "Ian";  }
+    if(unformatted == "Gabriel"||unformatted == "Gab") {
+    return "Gab";  }
+    if(unformatted == "Sebastian"||unformatted == "Basti") {
+    return "Basti";  } 
+    if(unformatted == "Jace") {
+    return "Jace";  }
+    if(unformatted == "Lianne") {
+    return "Lianne";  }
+    if(unformatted == "Margarita"||unformatted == "Marga") {
+    return "Marga";  }
+    if(unformatted == "Nickylie"||unformatted == "Kylie") {
+    return "Kylie";  }
+    if(unformatted == "SophiaGabrielle"||unformatted == "Sophia") {
+    return "Sophia";  } 
+    if(unformatted == "Veniece") {
+    return "Veniece";  }
+      
+      //Violin 3
+    if(unformatted == "RafaelS"||unformatted == "Rafael"||unformatted == "Rafael S.") {
+    return "Rafael S.";  }
+    if(unformatted == "VivienneAudrey"||unformatted == "Vivienne") {
+    return "Vivienne";  }
+    if(unformatted == "Lemuel") {
+    return "Lemuel";  }
+    if(unformatted == "Jediah") {
+    return "Jediah";  }
+    if(unformatted == "Nica"||unformatted == "BellaMonte"||unformatted == "Bella Monte") {
+    return "Bella Monte";  }
+    if(unformatted == "Jaime") {
+    return "Jaime";  }
+    if(unformatted == "Eliana") {
+    return "Eliana";  }
+    if(unformatted == "Raya") {
+    return "Raya";  }
+    if(unformatted == "Dyego") {
+    return "Dyego";  }
+      
+      //Viola
+    if(unformatted == "KerrMcGee"||unformatted == "Kerr") {
+    return "Kerr";  }
+    if(unformatted == "Regina") {
+    return "Regina";  }
+    if(unformatted == "Seanna"||unformatted == "Lumi") {
+    return "Lumi";  }
+    if(unformatted == "Azul") {
+    return "Azul";  }
+    if(unformatted == "SophiaAnne"||unformatted == "Sophie") {
+    return "Sophie";  }
+      
+      //Cello
+    if(unformatted == "Luis") {
+    return "Luis";  }
+    if(unformatted == "Lucas"||unformatted == "Storm") {
+    return "Storm";  }
+    if(unformatted == "Inigo") {
+    return "Inigo";  }
+    if(unformatted == "Patrice") {
+    return "Patrice";  }
+    if(unformatted == "Fransisco"||unformatted == "Rocco") {
+    return "Rocco";  }
+    if(unformatted == "AshtonCastro"||unformatted == "Ashton Castro"||unformatted == "Ashton") {
+    return "Ashton";  }
+    if(unformatted == "StephanieAnastacia"||unformatted == "Stephanie"||unformatted == "Annie") {
+    return "Annie";  }
+    if(unformatted == "Adeline"||unformatted == "Ady") {
+    return "Ady";  }
+    if(unformatted == "LiaElizabeth"||unformatted == "Lia"||unformatted == "Lizzie") {
+    return "Lizzie";  }
+    if(unformatted == "Andre") {
+    return "Andre";  }
+    if(unformatted == "RafaelO"||unformatted == "Rafael O.") {
+    return "Rafael O.";  }
+    if(unformatted == "LiaMadeleine"||unformatted == "Madeleine"||unformatted == "Maddy") {
+    return "Maddy";  }
+    if(unformatted == "Aurelia"||unformatted == "Ellie") {
+    return "Ellie";  }
+    if(unformatted == "Caitlin") {
+    return "Caitlin";  }
+    if(unformatted == "Aleesha") {
+    return "Aleesha";  }
+      
+      //Db Bass, Piano, and Perc
+    if(unformatted == "Yob") {
+    return "Yob";  }
+    if(unformatted == "Paulina") {
+    return "Paulina";  }
+    if(unformatted == "Angela") {
+    return "Angela";  }
+    if(unformatted == "Mary"||unformatted == "Chinee") {
+    return "Chinee";  }
+    if(unformatted == "Noah") {
+    return "Noah";  }
+      
+      //Formatting
+    if(unformatted == "A") {
+    return "A";  }
+    if(unformatted == "B") {
+    return "B";  }
+    if(unformatted == "C") {
+    return "C";  }
+    if(unformatted == "Blank") {
+    return "--Blank--";  }
+    else {
+    return "";
+    } }
   
 </script>
   </body>
